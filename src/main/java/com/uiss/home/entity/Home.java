@@ -17,8 +17,9 @@ public class Home {
     @SequenceGenerator(name = "home_generator", sequenceName = "home_seq", allocationSize = 1)
     private Integer id;
 
+    private String homeId;// automatically generated for querying and easily CRUD operations
     private String homeTitle;
     private String homeDescription;
-    private String backgroundImage;
+    private String backgroundImageUrl;
 
 }
