@@ -1,0 +1,19 @@
+spring:
+   application:
+       name: uiss
+   datasource:
+     url: jdbc:postgresql://localhost:5432/uiss
+     username: postgres
+     password: mdsoln
+     driver-class-name: org.postgresql.Driver
+   jpa:
+     hibernate:
+       ddl-auto: update
+     database: postgresql
+     database-platform: org.hibernate.dialect.PostgreSQLDialect
+## logging logs
+logging:
+  level:
+    org.springframework: DEBUG
+    org.hibernate: DEBUG
+    com.zaxxer.hikari: DEBUG
