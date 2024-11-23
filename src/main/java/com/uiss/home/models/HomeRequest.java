@@ -8,6 +8,6 @@ public record HomeRequest(
         @NotNull(message = "Home description is required")
         String homeDescription,
         @NotNull(message = "Required background image for home page")
-        String homeImage
+        String homeImageUrl
 ) {
 }
