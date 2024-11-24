@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HomeRepository extends JpaRepository<Home, Integer> {
 
-
+    Home findByHomeId(String homeId);
 }

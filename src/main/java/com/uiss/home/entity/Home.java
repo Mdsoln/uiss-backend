@@ -18,7 +18,7 @@ public class Home {
     @SequenceGenerator(name = "home_generator", sequenceName = "home_seq", allocationSize = 1)
     private Integer id;
 
-    @Column(nullable = false, length = 9)
+    @Column(name = "home_id", nullable = false, length = 9)
     private String homeId;// automatically generated for querying and easily CRUD operations
     @Size(max = 160)
     @Column(nullable = false, length = 160)

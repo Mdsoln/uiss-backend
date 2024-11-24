@@ -1,6 +1,7 @@
 package com.uiss.home.handler;
 
 
+import com.uiss.home.exception.HomeDetailsNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -43,4 +44,12 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(errorResponse);
     }
+
+    @ExceptionHandler(HomeDetailsNotFoundException.class)
+    public ResponseEntity<String> handleInvalidHomeIdException(HomeDetailsNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getErrorCode());
+    }
+
 }
