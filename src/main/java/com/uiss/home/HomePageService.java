@@ -1,10 +1,16 @@
 package com.uiss.home;
 import com.uiss.home.entity.Home;
+import com.uiss.home.entity.Programmes;
+import com.uiss.home.entity.StartWith;
 import com.uiss.home.exception.HomeDetailsNotFoundException;
 import com.uiss.home.mapper.HomePageMapper;
 import com.uiss.home.models.HomeRequest;
+import com.uiss.home.models.ProgramRequest;
 import com.uiss.home.repository.HomeRepository;
+import com.uiss.home.repository.ProgrammesRepository;
+import com.uiss.home.repository.StartWithYouRepository;
 import io.micrometer.common.util.StringUtils;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +20,8 @@ public class HomePageService {
 
     private final HomeRepository homeRepository;
     private final HomePageMapper mapper;
+    private final StartWithYouRepository startWithYouRepository;
+    private final ProgrammesRepository programmesRepository;
 
     public String createHomePageDetails(HomeRequest homeRequest) {
         var response = mapper.toHome(homeRequest);
@@ -52,5 +60,29 @@ public class HomePageService {
             home.setBackgroundImageUrl(homeRequest.homeImageUrl());
         }
 
+    }
+
+    public String createStartWithYouDetails(String sectionTitle, String description, String imagePath) {
+        var response = mapper.toStartWithYou(sectionTitle, description, imagePath);
+        return startWithYouRepository.save(response).getId().toString();
+    }
+
+    public void editImagePath(Integer sectionId, String imagePath) {
+        var response = startWithYouRepository.findById(sectionId)
+                .orElseThrow(()-> new EntityNotFoundException("Can not update image path:: Start with you section with ID %s not found"+sectionId));
+
+        StartWith.builder().imagePath(imagePath).build();
+        startWithYouRepository.save(response);
+    }
+
+    public String exploreOurProgrammes(ProgramRequest programRequest) {
+        Programmes programmes = Programmes.builder()
+                .about(programRequest.about())
+                .mission(programRequest.mission())
+                .vision(programRequest.vision())
+                .youTubeUrl(programRequest.youTubeUrl())
+                .build();
+        programmesRepository.save(programmes);
+        return "Programmes saved successfully";
     }
 }
