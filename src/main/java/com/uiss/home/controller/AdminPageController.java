@@ -1,7 +1,9 @@
 package com.uiss.home.controller;
 
 import com.uiss.home.HomePageService;
+import com.uiss.home.exception.NullValueException;
 import com.uiss.home.models.HomeRequest;
+import com.uiss.home.models.ProgramRequest;
 import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +48,37 @@ public class AdminPageController {
         homePageService.updateHomePageDetails(homeId, homeRequest);
         return new ResponseEntity<>("Home details updated successfully with ID: "+homeId, HttpStatus.OK);
     }
-    // TODO: 11/23/24 updating the home details 
+
+    @CrossOrigin()
+    @PostMapping("/section-two/insert-start-with-details")
+    public ResponseEntity<String> insertStartWithDetails(
+            @RequestParam(name = "title", defaultValue = "It Starts With You") String sectionTitle,
+            @RequestParam(name = "description") String description,
+            @RequestParam(name = "imagePath", required = false) String imagePath
+    ) {
+        if (StringUtils.isEmpty(sectionTitle) || StringUtils.isEmpty(description) || StringUtils.isEmpty(imagePath)) {
+            throw new NullValueException("All fields are required!");
+        }
+        String response = homePageService.createStartWithYouDetails(sectionTitle, description, imagePath);
+
+        return ResponseEntity.ok("Start with details section created successfully with ID section: " + response);
+    }
+
+    @CrossOrigin()
+    @PostMapping("/section-two/edit-image-path/{section-id}")
+    public ResponseEntity<String> editImagePath(@PathVariable("section-id") Integer sectionId, @RequestParam(name = "imagePath") String imagePath) {
+        if (sectionId == null || sectionId <= 0) {
+            throw new NullValueException("Section ID is invalid!");
+        }
+        homePageService.editImagePath(sectionId, imagePath);
+        return ResponseEntity.ok("Image path updated successfully with ID section: " + sectionId);
+    }
+
+    @CrossOrigin()
+    @PostMapping("/explore-our-programmes")
+    public ResponseEntity<String> exploreOurProgrammes(@RequestBody @Valid ProgramRequest programRequest) {
+        return new ResponseEntity<>(homePageService.exploreOurProgrammes(programRequest), HttpStatus.CREATED);
+    }
+
+
 }
