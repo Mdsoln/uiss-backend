@@ -1,19 +1,41 @@
 spring:
-   application:
-       name: uiss
-   datasource:
-     url: jdbc:postgresql://localhost:5432/uiss
-     username: postgres
-     password: mdsoln
-     driver-class-name: org.postgresql.Driver
-   jpa:
-     hibernate:
-       ddl-auto: update
-     database: postgresql
-     database-platform: org.hibernate.dialect.PostgreSQLDialect
-## logging logs
+  application:
+    name: uiss
+  datasource:
+    url: jdbc:postgresql://dpg-ct9hc952ng1s739h47mg-a:5432/uiss
+    username: uiss_user
+    password: QtFJUuquqSp7UN1LGjwnOTKwz6fKW0POJ
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+# Logging levels
 logging:
   level:
     org.springframework: DEBUG
     org.hibernate: DEBUG
     com.zaxxer.hikari: DEBUG
+
+#for development configurations
+#spring:
+#   application:
+#       name: uiss
+#   datasource:
+#     url: jdbc:postgresql://localhost:5432/uiss
+#     username: postgres
+#     password: mdsoln
+#     driver-class-name: org.postgresql.Driver
+#   jpa:
+#     hibernate:
+#       ddl-auto: update
+#     database: postgresql
+#     database-platform: org.hibernate.dialect.PostgreSQLDialect
+### logging logs
+#logging:
+#  level:
+#    org.springframework: DEBUG
+#    org.hibernate: DEBUG
+#    com.zaxxer.hikari: DEBUG
