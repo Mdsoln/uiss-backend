@@ -14,6 +14,7 @@ import com.uiss.home.repository.ProgrammesRepository;
 import com.uiss.home.repository.StartWithYouRepository;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -109,5 +110,17 @@ public class HomePageService {
                 .build();
         eventRepository.save(event);
         return "Event saved successfully";
+    }
+
+    public void updateUpcomingEvent(Integer eventId, UpcomingEvent upcomingEventRequest) {
+        var updateEvent = eventRepository.findById(eventId)
+                .orElseThrow(()-> new EntityNotFoundException("Can not update event:: event ID %s not found"+eventId));
+
+        updateEvent.setTitle(upcomingEventRequest.title());
+        updateEvent.setDescription(upcomingEventRequest.description());
+        updateEvent.setImageUrl(upcomingEventRequest.imageUrl());
+        updateEvent.setTime(upcomingEventRequest.time());
+        updateEvent.setDate(upcomingEventRequest.date());
+        eventRepository.save(updateEvent);
     }
 }

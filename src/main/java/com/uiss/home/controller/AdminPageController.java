@@ -1,9 +1,11 @@
 package com.uiss.home.controller;
 
+import com.sun.jdi.request.EventRequest;
 import com.uiss.home.HomePageService;
 import com.uiss.home.exception.NullValueException;
 import com.uiss.home.models.HomeRequest;
 import com.uiss.home.models.ProgramRequest;
+import com.uiss.home.models.UpcomingEvent;
 import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -75,11 +77,28 @@ public class AdminPageController {
     }
 
     @CrossOrigin()
-    @PostMapping("/explore-our-programmes")
+    @PostMapping("/programmes/explore-our-programmes")
     public ResponseEntity<String> exploreOurProgrammes(@RequestBody @Valid ProgramRequest programRequest) {
         return new ResponseEntity<>(homePageService.exploreOurProgrammes(programRequest), HttpStatus.CREATED);
     }
 
 
+    @CrossOrigin()
+    @PostMapping("/upcoming-events/create-event")
+    public ResponseEntity<String> createEvent(@RequestBody @Valid UpcomingEvent eventRequest) {
+         return new ResponseEntity<>(homePageService.createUpComingEvent(eventRequest), HttpStatus.CREATED);
+    }
+
+    @CrossOrigin()
+    @PostMapping("/update/upcoming-events/edit-event/{event-id}")
+    public ResponseEntity<String> updateUpcomingEvent(@PathVariable("event-id") Integer eventId, @RequestBody @Valid UpcomingEvent upcomingEventRequest) {
+        if (eventId == null){
+            throw new NullValueException("Event ID is invalid!");
+        }
+
+        homePageService.updateUpcomingEvent(eventId, upcomingEventRequest);
+
+        return new ResponseEntity<>("Upcoming event updated successfully with ID: "+eventId, HttpStatus.OK);
+    }
 
 }
