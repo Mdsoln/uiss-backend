@@ -7,11 +7,9 @@ import com.uiss.home.exception.HomeDetailsNotFoundException;
 import com.uiss.home.mapper.HomePageMapper;
 import com.uiss.home.models.HomeRequest;
 import com.uiss.home.models.ProgramRequest;
+import com.uiss.home.models.TestimonialRequest;
 import com.uiss.home.models.UpcomingEvent;
-import com.uiss.home.repository.EventRepository;
-import com.uiss.home.repository.HomeRepository;
-import com.uiss.home.repository.ProgrammesRepository;
-import com.uiss.home.repository.StartWithYouRepository;
+import com.uiss.home.repository.*;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -32,6 +30,7 @@ public class HomePageService {
     private final StartWithYouRepository startWithYouRepository;
     private final ProgrammesRepository programmesRepository;
     private final EventRepository eventRepository;
+    private final TestimonialsRepository testimonialsRepository;
 
     public String createHomePageDetails(HomeRequest homeRequest) {
         var response = mapper.toHome(homeRequest);
@@ -122,5 +121,21 @@ public class HomePageService {
         updateEvent.setTime(upcomingEventRequest.time());
         updateEvent.setDate(upcomingEventRequest.date());
         eventRepository.save(updateEvent);
+    }
+
+    public String createTestimonial(TestimonialRequest testimonialRequest) {
+        var testimonial = mapper.toTestimonial(testimonialRequest);
+        return testimonialsRepository.save(testimonial).getId().toString();
+    }
+
+    public void updateTestimonial(Integer testimonialId, TestimonialRequest testimonialRequest) {
+        var testimonial = testimonialsRepository.findById(testimonialId)
+                .orElseThrow(()-> new EntityNotFoundException("Can not update testimonial:: testimonial ID %s not found"+testimonialId));
+
+        testimonial.setDescription(testimonialRequest.description());
+        testimonial.setImageUrl(testimonialRequest.imageUrl());
+        testimonial.setPosition(testimonialRequest.position());
+        testimonial.setFullname(testimonialRequest.fullname());
+        testimonialsRepository.save(testimonial);
     }
 }

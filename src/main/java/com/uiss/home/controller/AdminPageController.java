@@ -1,10 +1,11 @@
 package com.uiss.home.controller;
 
-import com.sun.jdi.request.EventRequest;
+
 import com.uiss.home.HomePageService;
 import com.uiss.home.exception.NullValueException;
 import com.uiss.home.models.HomeRequest;
 import com.uiss.home.models.ProgramRequest;
+import com.uiss.home.models.TestimonialRequest;
 import com.uiss.home.models.UpcomingEvent;
 import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;
@@ -99,6 +100,24 @@ public class AdminPageController {
         homePageService.updateUpcomingEvent(eventId, upcomingEventRequest);
 
         return new ResponseEntity<>("Upcoming event updated successfully with ID: "+eventId, HttpStatus.OK);
+    }
+
+    @CrossOrigin()
+    @PostMapping("/testimonials/create-testimonial")
+    public ResponseEntity<String> createTestimonial(@RequestBody @Valid TestimonialRequest testimonialRequest) {
+        return new ResponseEntity<>(homePageService.createTestimonial(testimonialRequest), HttpStatus.CREATED);
+    }
+
+    @CrossOrigin()
+    @PostMapping("/update/testimonials/edit-testimonial/{testimonial-id}")
+    public ResponseEntity<String> updateTestimonial(@PathVariable("testimonial-id") Integer testimonialId, @RequestBody @Valid TestimonialRequest testimonialRequest) {
+        if (testimonialId == null){
+            throw new NullValueException("Testimonial ID is invalid!");
+        }
+
+        homePageService.updateTestimonial(testimonialId, testimonialRequest);
+        return new ResponseEntity<>("Testimonial updated successfully with ID: "+testimonialId, HttpStatus.OK);
+
     }
 
 }
