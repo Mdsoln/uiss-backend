@@ -1,9 +1,12 @@
 package com.uiss.home.controller;
 
+
 import com.uiss.home.HomePageService;
 import com.uiss.home.exception.NullValueException;
 import com.uiss.home.models.HomeRequest;
 import com.uiss.home.models.ProgramRequest;
+import com.uiss.home.models.TestimonialRequest;
+import com.uiss.home.models.UpcomingEvent;
 import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -75,11 +78,46 @@ public class AdminPageController {
     }
 
     @CrossOrigin()
-    @PostMapping("/explore-our-programmes")
+    @PostMapping("/programmes/explore-our-programmes")
     public ResponseEntity<String> exploreOurProgrammes(@RequestBody @Valid ProgramRequest programRequest) {
         return new ResponseEntity<>(homePageService.exploreOurProgrammes(programRequest), HttpStatus.CREATED);
     }
 
 
+    @CrossOrigin()
+    @PostMapping("/upcoming-events/create-event")
+    public ResponseEntity<String> createEvent(@RequestBody @Valid UpcomingEvent eventRequest) {
+         return new ResponseEntity<>(homePageService.createUpComingEvent(eventRequest), HttpStatus.CREATED);
+    }
+
+    @CrossOrigin()
+    @PostMapping("/update/upcoming-events/edit-event/{event-id}")
+    public ResponseEntity<String> updateUpcomingEvent(@PathVariable("event-id") Integer eventId, @RequestBody @Valid UpcomingEvent upcomingEventRequest) {
+        if (eventId == null){
+            throw new NullValueException("Event ID is invalid!");
+        }
+
+        homePageService.updateUpcomingEvent(eventId, upcomingEventRequest);
+
+        return new ResponseEntity<>("Upcoming event updated successfully with ID: "+eventId, HttpStatus.OK);
+    }
+
+    @CrossOrigin()
+    @PostMapping("/testimonials/create-testimonial")
+    public ResponseEntity<String> createTestimonial(@RequestBody @Valid TestimonialRequest testimonialRequest) {
+        return new ResponseEntity<>(homePageService.createTestimonial(testimonialRequest), HttpStatus.CREATED);
+    }
+
+    @CrossOrigin()
+    @PostMapping("/update/testimonials/edit-testimonial/{testimonial-id}")
+    public ResponseEntity<String> updateTestimonial(@PathVariable("testimonial-id") Integer testimonialId, @RequestBody @Valid TestimonialRequest testimonialRequest) {
+        if (testimonialId == null){
+            throw new NullValueException("Testimonial ID is invalid!");
+        }
+
+        homePageService.updateTestimonial(testimonialId, testimonialRequest);
+        return new ResponseEntity<>("Testimonial updated successfully with ID: "+testimonialId, HttpStatus.OK);
+
+    }
 
 }
