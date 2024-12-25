@@ -1,6 +1,38 @@
 spring:
   application:
     name: uiss
+  profiles:
+    active: dev
+
+# Common configuration
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/uiss
+    username: postgres
+    password: mdsoln
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+logging:
+  level:
+    org.springframework: DEBUG
+    org.hibernate: DEBUG
+    com.zaxxer.hikari: DEBUG
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
@@ -8,35 +40,11 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-
-# Logging levels
 logging:
   level:
-    org.springframework: DEBUG
-    org.hibernate: DEBUG
-    com.zaxxer.hikari: DEBUG
-
-
-#for development configurations
-#spring:
-#   application:
-#       name: uiss
-#   datasource:
-#     url: jdbc:postgresql://localhost:5432/uiss
-#     username: postgres
-#     password: mdsoln
-#     driver-class-name: org.postgresql.Driver
-#   jpa:
-#     hibernate:
-#       ddl-auto: update
-#     database: postgresql
-#     database-platform: org.hibernate.dialect.PostgreSQLDialect
-### logging logs
-#logging:
-#  level:
-#    org.springframework: DEBUG
-#    org.hibernate: DEBUG
-#    com.zaxxer.hikari: DEBUG
+    org.springframework: INFO
+    org.hibernate: INFO
+    com.zaxxer.hikari: INFO
