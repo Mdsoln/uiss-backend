@@ -32,20 +32,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .requestMatchers("/api/v1/**")
-                        .permitAll()  // Traditional login/signup
-                        .requestMatchers("/oauth2/**").permitAll()        // OAuth2 login
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .oauth2Login(oauth2Login -> oauth2Login
-                        .defaultSuccessUrl("/api/v1/auth/success", true)
-                        .failureUrl("/api/v1/auth/failure")
-                        .loginPage("/api/v1/auth/sign-in")  // Optional: Specify a login page
-                );
+                        .permitAll()
+                ).sessionManagement(
+                        session -> session
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                ).authenticationProvider(authenticationProvider
+                ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

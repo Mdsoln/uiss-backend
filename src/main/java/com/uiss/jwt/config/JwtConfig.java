@@ -1,7 +1,7 @@
 package com.uiss.jwt.config;
 
-import core.entity.Users;
-import core.repo.UserRepository;
+import com.uiss.home.entity.Users;
+import com.uiss.home.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JwtConfig {
 
-    private final UserRepository userRepo;
+    private final UsersRepository userRepo;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -33,7 +33,7 @@ public class JwtConfig {
             Optional<Users> user = userRepo.findByEmail(identifier);
 
             if (user.isEmpty()) {
-                user = userRepo.findByUsername(identifier);
+                user = Optional.ofNullable(userRepo.findByUsername(identifier));
             }
             Users foundUser = user.orElseThrow(() -> new UsernameNotFoundException("Username or Email not found"));
             return new org.springframework.security.core.userdetails.User(

@@ -1,6 +1,6 @@
 package com.uiss.jwt.config;
 
-import core.jwt.service.JwtService;
+import com.uiss.jwt.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
