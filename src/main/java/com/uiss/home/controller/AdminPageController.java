@@ -81,7 +81,7 @@ public class AdminPageController {
     }
 
     @CrossOrigin()
-    @PostMapping("/programmes/explore-our-programmes")
+    @PostMapping("/insert/programmes-details")
     public ResponseEntity<String> exploreOurProgrammes(@RequestBody @Valid ProgramRequest programRequest) {
         return new ResponseEntity<>(homePageService.exploreOurProgrammes(programRequest), HttpStatus.CREATED);
     }
