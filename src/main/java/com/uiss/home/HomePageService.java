@@ -9,6 +9,7 @@ import com.uiss.home.models.HomeRequest;
 import com.uiss.home.models.ProgramRequest;
 import com.uiss.home.models.TestimonialRequest;
 import com.uiss.home.models.UpcomingEvent;
+import com.uiss.home.models.responses.HomeResponse;
 import com.uiss.home.repository.*;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -137,5 +138,37 @@ public class HomePageService {
         testimonial.setPosition(testimonialRequest.position());
         testimonial.setFullname(testimonialRequest.fullname());
         testimonialsRepository.save(testimonial);
+    }
+
+    public HomeResponse getHomePageDetails() {
+        Home home = homeRepository.findAll().stream()
+                .findFirst()
+                .orElseThrow(()-> new EntityNotFoundException("Can not get home page::"));
+        return HomeResponse.builder()
+                .homeTitle(home.getHomeTitle())
+                .homeDescription(home.getHomeDescription())
+                .homeImage(home.getBackgroundImageUrl())
+                .build();
+    }
+
+    public HomeResponse getHomePageDetails(String homeId) {
+        Home home = homeRepository.findByHomeId(homeId);
+        if (home == null) {
+            throw new EntityNotFoundException("Cannot find home page with ID " + homeId);
+        }
+        return HomeResponse.builder()
+                .homeTitle(home.getHomeTitle())
+                .homeDescription(home.getHomeDescription())
+                .homeImage(home.getBackgroundImageUrl())
+                .build();
+    }
+
+    public void editStartWithDetails(Integer sectionId, String imagePath, String sectionTitle, String description) {
+        var section = startWithYouRepository.findById(sectionId)
+                .orElseThrow(()-> new EntityNotFoundException("Can not update section:: section ID %s not found"+sectionId));
+        section.setTitle(sectionTitle);
+        section.setImagePath(imagePath);
+        section.setDescription(description);
+        startWithYouRepository.save(section);
     }
 }
