@@ -2,7 +2,7 @@ spring:
   application:
     name: uiss
   profiles:
-    active: dev
+    active: prod
 
 # Common configuration
 ---
