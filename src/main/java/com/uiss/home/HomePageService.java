@@ -10,6 +10,8 @@ import com.uiss.home.models.ProgramRequest;
 import com.uiss.home.models.TestimonialRequest;
 import com.uiss.home.models.UpcomingEvent;
 import com.uiss.home.models.responses.HomeResponse;
+import com.uiss.home.models.responses.ProgrammesResponse;
+import com.uiss.home.models.responses.SectionResponse;
 import com.uiss.home.repository.*;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,7 +22,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -143,7 +147,7 @@ public class HomePageService {
     public HomeResponse getHomePageDetails() {
         Home home = homeRepository.findAll().stream()
                 .findFirst()
-                .orElseThrow(()-> new EntityNotFoundException("Can not get home page::"));
+                .orElseThrow(()-> new EntityNotFoundException("Can not get home page:: Home page not found"));
         return HomeResponse.builder()
                 .homeTitle(home.getHomeTitle())
                 .homeDescription(home.getHomeDescription())
@@ -170,5 +174,31 @@ public class HomePageService {
         section.setImagePath(imagePath);
         section.setDescription(description);
         startWithYouRepository.save(section);
+    }
+
+    public SectionResponse getSectionTwoStartWithDetails() {
+        StartWith startWith = startWithYouRepository.findAll().stream()
+                .findFirst()
+                .orElseThrow(()-> new EntityNotFoundException("Can not get section:: section not found"));
+        return SectionResponse.builder()
+                .title(startWith.getTitle())
+                .description(startWith.getDescription())
+                .imageUrl(startWith.getImagePath())
+                .build();
+    }
+
+    public SectionResponse getSectionTwoStartWithDetails(Integer sectionId) {
+        StartWith startWith = startWithYouRepository.findById(sectionId)
+                .orElseThrow(()-> new EntityNotFoundException("Can not get section:: section not found with ID " + sectionId));
+        return SectionResponse.builder()
+                .title(startWith.getTitle())
+                .description(startWith.getDescription())
+                .imageUrl(startWith.getImagePath())
+                .build();
+    }
+
+    public List<ProgrammesResponse> findAllProgrammes() {
+        List<Programmes> programmes = programmesRepository.findAll();
+        return programmes.stream().map(mapper::toProgrammesResponse).collect(Collectors.toList());
     }
 }

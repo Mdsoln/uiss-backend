@@ -1,4 +1,11 @@
 package com.uiss.home.models.responses;
 
-public record SectionResponse() {
+import lombok.Builder;
+
+@Builder
+public record SectionResponse(
+        String title,
+        String description,
+        String imageUrl
+) {
 }
