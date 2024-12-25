@@ -68,13 +68,16 @@ public class AdminPageController {
     }
 
     @CrossOrigin()
-    @PostMapping("/section-two/edit-image-path/{section-id}")
-    public ResponseEntity<String> editImagePath(@PathVariable("section-id") Integer sectionId, @RequestParam(name = "imagePath") String imagePath) {
+    @PostMapping("/section-two/edit-start-with-details/{section-id}")
+    public ResponseEntity<String> editStartWithDetails(@PathVariable("section-id") Integer sectionId,
+              @RequestParam(name = "title", required = false) String sectionTitle,
+              @RequestParam(name = "description", required = false) String description,
+              @RequestParam(name = "imagePath") String imagePath) {
         if (sectionId == null || sectionId <= 0) {
             throw new NullValueException("Section ID is invalid!");
         }
-        homePageService.editImagePath(sectionId, imagePath);
-        return ResponseEntity.ok("Image path updated successfully with ID section: " + sectionId);
+        homePageService.editStartWithDetails(sectionId, imagePath, sectionTitle, description);
+        return ResponseEntity.ok("Section details updated successfully with ID section: " + sectionId);
     }
 
     @CrossOrigin()
