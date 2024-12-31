@@ -8,6 +8,7 @@ import com.uiss.home.models.ProgramRequest;
 import com.uiss.home.models.TestimonialRequest;
 import com.uiss.home.models.UpcomingEvent;
 import io.micrometer.common.util.StringUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class AdminPageController {
     private final HomePageService homePageService;
 
     @CrossOrigin()
+    @Operation(summary = "Create home page details for section 1")
     @PostMapping("/insert/home-page-details")
     public ResponseEntity<String> createHomePageDetails(
             @RequestBody @Valid HomeRequest homeRequest
@@ -32,6 +34,7 @@ public class AdminPageController {
     }
 
     @CrossOrigin()
+    @Operation(summary = "Update specific home page title with home page ID")
     @PostMapping("/update/home-page-title/{home-id}")
     public ResponseEntity<String> updateHomePageTitle(@PathVariable("home-id") String homeId, @RequestParam(name = "homeTitle") String homeTitle) {
          if (StringUtils.isEmpty(homeId) || StringUtils.isEmpty(homeTitle) || StringUtils.isBlank(homeTitle) || StringUtils.isBlank(homeId)) {
@@ -42,6 +45,7 @@ public class AdminPageController {
     }
 
     @CrossOrigin()
+    @Operation(summary = "Update home page details with home page ID")
     @PostMapping("/update/home-page-details/{home-id}")
     public ResponseEntity<String> updateHomeDetails(@PathVariable("home-id") String homeId, @RequestBody @Valid HomeRequest homeRequest) {
         if (StringUtils.isEmpty(homeId)) {
@@ -53,6 +57,7 @@ public class AdminPageController {
     }
 
     @CrossOrigin()
+    @Operation(summary = "Create section 2 details(Start with You details)")
     @PostMapping("/section-two/insert-start-with-details")
     public ResponseEntity<String> insertStartWithDetails(
             @RequestParam(name = "title", defaultValue = "It Starts With You") String sectionTitle,
@@ -68,6 +73,7 @@ public class AdminPageController {
     }
 
     @CrossOrigin()
+    @Operation(summary = "Update section 2 details(Start with You details) by startwith section ID")
     @PostMapping("/section-two/edit-start-with-details/{section-id}")
     public ResponseEntity<String> editStartWithDetails(@PathVariable("section-id") Integer sectionId,
               @RequestParam(name = "title", required = false) String sectionTitle,
@@ -81,6 +87,7 @@ public class AdminPageController {
     }
 
     @CrossOrigin()
+    @Operation(summary = "Create section 3 programmes(Explore our programmes)")
     @PostMapping("/insert/programmes-details")
     public ResponseEntity<String> exploreOurProgrammes(@RequestBody @Valid ProgramRequest programRequest) {
         return new ResponseEntity<>(homePageService.exploreOurProgrammes(programRequest), HttpStatus.CREATED);
@@ -88,12 +95,14 @@ public class AdminPageController {
 
 
     @CrossOrigin()
+    @Operation(summary = "Create section 4 upcoming events")
     @PostMapping("/upcoming-events/create-event")
     public ResponseEntity<String> createEvent(@RequestBody @Valid UpcomingEvent eventRequest) {
          return new ResponseEntity<>(homePageService.createUpComingEvent(eventRequest), HttpStatus.CREATED);
     }
 
     @CrossOrigin()
+    @Operation(summary = "Update upcoming event details with specific event ID")
     @PostMapping("/update/upcoming-events/edit-event/{event-id}")
     public ResponseEntity<String> updateUpcomingEvent(@PathVariable("event-id") Integer eventId, @RequestBody @Valid UpcomingEvent upcomingEventRequest) {
         if (eventId == null){
@@ -106,12 +115,14 @@ public class AdminPageController {
     }
 
     @CrossOrigin()
+    @Operation(summary = "Create section 5 testimonials")
     @PostMapping("/testimonials/create-testimonial")
     public ResponseEntity<String> createTestimonial(@RequestBody @Valid TestimonialRequest testimonialRequest) {
         return new ResponseEntity<>(homePageService.createTestimonial(testimonialRequest), HttpStatus.CREATED);
     }
 
     @CrossOrigin()
+    @Operation(summary = "Update section 5 testimonials with testimonial ID")
     @PostMapping("/update/testimonials/edit-testimonial/{testimonial-id}")
     public ResponseEntity<String> updateTestimonial(@PathVariable("testimonial-id") Integer testimonialId, @RequestBody @Valid TestimonialRequest testimonialRequest) {
         if (testimonialId == null){
