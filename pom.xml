@@ -44,11 +44,6 @@
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.15</version> <!-- Use the latest compatible version -->
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.0.2</version>
         </dependency>
@@ -83,8 +78,6 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.11.5</version>
         </dependency>
-        <!--JWT Dependencies-->
-
         <!--Spring security dependencies-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -95,8 +88,8 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--Spring security dependencies-->
     </dependencies>
+
 
     <build>
         <plugins>
