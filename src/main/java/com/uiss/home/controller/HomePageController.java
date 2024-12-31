@@ -84,4 +84,31 @@ public class HomePageController {
 
         return ResponseEntity.ok(response);
     }
+
+    @CrossOrigin()
+    @Operation(summary = "Get all testimonials with pageable response")
+    @GetMapping("/testimonials/get-all-testimonials")
+    public ResponseEntity<PageResponse<Object[]>> getAllTestimonials(
+            @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "6") int pageSize
+    ) {
+        if (pageNumber < 1) {
+            throw new IllegalArgumentException("Error::Invalid page number");
+        }
+        if (pageSize < 1) {
+            throw new IllegalArgumentException("Error::Invalid page size");
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by("createdAt"));
+        Page<Object[]> customers = homePageService.findAllTestimonials(pageable);
+
+        PageResponse<Object[]> response = new PageResponse<>(
+                customers.getContent(),
+                customers.getNumber(),
+                customers.getTotalPages(),
+                customers.getTotalElements()
+        );
+
+        return ResponseEntity.ok(response);
+    }
 }

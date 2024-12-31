@@ -1,15 +1,9 @@
 package com.uiss.home;
-import com.uiss.home.entity.Event;
-import com.uiss.home.entity.Home;
-import com.uiss.home.entity.Programmes;
-import com.uiss.home.entity.StartWith;
+import com.uiss.home.entity.*;
 import com.uiss.home.exception.DatabaseException;
 import com.uiss.home.exception.HomeDetailsNotFoundException;
 import com.uiss.home.mapper.HomePageMapper;
-import com.uiss.home.models.HomeRequest;
-import com.uiss.home.models.ProgramRequest;
-import com.uiss.home.models.TestimonialRequest;
-import com.uiss.home.models.UpcomingEvent;
+import com.uiss.home.models.*;
 import com.uiss.home.models.responses.HomeResponse;
 import com.uiss.home.models.responses.ProgrammesResponse;
 import com.uiss.home.models.responses.SectionResponse;
@@ -18,9 +12,9 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -40,6 +34,7 @@ public class HomePageService {
     private final ProgrammesRepository programmesRepository;
     private final EventRepository eventRepository;
     private final TestimonialsRepository testimonialsRepository;
+    private final QuotesRepository quotesRepository;
 
     public String createHomePageDetails(HomeRequest homeRequest) {
         var response = mapper.toHome(homeRequest);
@@ -212,5 +207,33 @@ public class HomePageService {
         }catch (DatabaseException e) {
             throw new DatabaseException(e.getMessage());
         }
+    }
+
+    public Page<Object[]> findAllTestimonials(Pageable pageable) {
+        try {
+            return testimonialsRepository.findAllTestimonials(pageable);
+        }catch (DatabaseException e){
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
+    public String createQuote(@Valid QuoteRequest request) {
+        Quotes quote = Quotes.builder()
+                .quote(request.quote())
+                .author(request.author())
+                .position(request.position())
+                .build();
+        quotesRepository.save(quote);
+        return "Quote created successfully";
+    }
+
+    public String updateQuote(Integer quoteId, @Valid QuoteRequest request) {
+        var quote = quotesRepository.findById(quoteId)
+                .orElseThrow(()-> new EntityNotFoundException("Can not update quote:: quote not found"));
+        quote.setQuote(request.quote());
+        quote.setAuthor(request.author());
+        quote.setPosition(request.position());
+        quotesRepository.save(quote);
+        return "Quote updated successfully";
     }
 }

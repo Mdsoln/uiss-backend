@@ -1,4 +1,8 @@
 package com.uiss.home.models;
 
-public class QuoteRequest {
+public record QuoteRequest(
+        String quote,
+        String author,
+        String position
+) {
 }
