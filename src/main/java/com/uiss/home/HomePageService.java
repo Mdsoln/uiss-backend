@@ -3,6 +3,7 @@ import com.uiss.home.entity.Event;
 import com.uiss.home.entity.Home;
 import com.uiss.home.entity.Programmes;
 import com.uiss.home.entity.StartWith;
+import com.uiss.home.exception.DatabaseException;
 import com.uiss.home.exception.HomeDetailsNotFoundException;
 import com.uiss.home.mapper.HomePageMapper;
 import com.uiss.home.models.HomeRequest;
@@ -17,6 +18,9 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -200,5 +204,13 @@ public class HomePageService {
     public List<ProgrammesResponse> findAllProgrammes() {
         List<Programmes> programmes = programmesRepository.findAll();
         return programmes.stream().map(mapper::toProgrammesResponse).collect(Collectors.toList());
+    }
+
+    public Page<Object[]> findAllUpcomingEvents(Pageable pageable) {
+        try {
+            return eventRepository.findAllUpcomingEvents(pageable);
+        }catch (DatabaseException e) {
+            throw new DatabaseException(e.getMessage());
+        }
     }
 }

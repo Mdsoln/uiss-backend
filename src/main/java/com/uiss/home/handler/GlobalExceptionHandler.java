@@ -1,6 +1,7 @@
 package com.uiss.home.handler;
 
 
+import com.uiss.home.exception.DatabaseException;
 import com.uiss.home.exception.HomeDetailsNotFoundException;
 import com.uiss.home.exception.NullValueException;
 import jakarta.persistence.EntityNotFoundException;
@@ -68,5 +69,17 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleInvalidHomeIdException(IllegalArgumentException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
 
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<String> handleInvalidHomeIdException(DatabaseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getErrorCode());
+    }
 }

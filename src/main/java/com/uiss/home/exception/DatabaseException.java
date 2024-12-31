@@ -1,4 +1,10 @@
 package com.uiss.home.exception;
 
-public class DatabaseException {
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper=true)
+@Data
+public class DatabaseException extends RuntimeException {
+    private final String errorCode;
 }
