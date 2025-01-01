@@ -62,10 +62,10 @@ public class HomePageController {
     @Operation(summary = "Get all upcoming events with pageable response")
     @GetMapping("/upcoming-event/get-all-events")
     public ResponseEntity<PageResponse<Object[]>> getAllUpcomingEvents(
-            @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "6") int pageSize
     ) {
-        if (pageNumber < 1) {
+        if (pageNumber < 0) {
             throw new IllegalArgumentException("Error::Invalid page number");
         }
         if (pageSize < 1) {
@@ -89,10 +89,10 @@ public class HomePageController {
     @Operation(summary = "Get all testimonials with pageable response")
     @GetMapping("/testimonials/get-all-testimonials")
     public ResponseEntity<PageResponse<Object[]>> getAllTestimonials(
-            @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "6") int pageSize
     ) {
-        if (pageNumber < 1) {
+        if (pageNumber < 0) {
             throw new IllegalArgumentException("Error::Invalid page number");
         }
         if (pageSize < 1) {
@@ -101,6 +101,33 @@ public class HomePageController {
 
         Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by("createdAt"));
         Page<Object[]> customers = homePageService.findAllTestimonials(pageable);
+
+        PageResponse<Object[]> response = new PageResponse<>(
+                customers.getContent(),
+                customers.getNumber(),
+                customers.getTotalPages(),
+                customers.getTotalElements()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @CrossOrigin()
+    @Operation(summary = "Get all UISS Quotes with pageable response")
+    @GetMapping("/uiss-quotes/get-all-quotes")
+    public ResponseEntity<PageResponse<Object[]>> getAllQuotes(
+            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "6") int pageSize
+    ) {
+        if (pageNumber < 0) {
+            throw new IllegalArgumentException("Error::Invalid page number");
+        }
+        if (pageSize < 1) {
+            throw new IllegalArgumentException("Error::Invalid page size");
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by("author"));
+        Page<Object[]> customers = homePageService.findAllQuotes(pageable);
 
         PageResponse<Object[]> response = new PageResponse<>(
                 customers.getContent(),

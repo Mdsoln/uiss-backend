@@ -236,4 +236,12 @@ public class HomePageService {
         quotesRepository.save(quote);
         return "Quote updated successfully";
     }
+
+    public Page<Object[]> findAllQuotes(Pageable pageable) {
+        try {
+            return quotesRepository.findAllQuotes(pageable);
+        }catch (Exception e){
+            throw new DatabaseException(e.getMessage());
+        }
+    }
 }
