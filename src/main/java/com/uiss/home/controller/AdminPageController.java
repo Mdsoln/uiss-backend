@@ -3,10 +3,7 @@ package com.uiss.home.controller;
 
 import com.uiss.home.HomePageService;
 import com.uiss.home.exception.NullValueException;
-import com.uiss.home.models.HomeRequest;
-import com.uiss.home.models.ProgramRequest;
-import com.uiss.home.models.TestimonialRequest;
-import com.uiss.home.models.UpcomingEvent;
+import com.uiss.home.models.*;
 import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -132,6 +129,23 @@ public class AdminPageController {
         homePageService.updateTestimonial(testimonialId, testimonialRequest);
         return new ResponseEntity<>("Testimonial updated successfully with ID: "+testimonialId, HttpStatus.OK);
 
+    }
+
+    @CrossOrigin()
+    @Operation(summary = "Create a new Quote")
+    @PostMapping("/uiss-quotes/create-quotes")
+    public ResponseEntity<String> createQuotes(@RequestBody @Valid QuoteRequest request){
+        return new ResponseEntity<>(homePageService.createQuote(request), HttpStatus.CREATED);
+    }
+
+    @CrossOrigin()
+    @Operation(summary = "Update Quote details")
+    @PostMapping("/uiss-quotes/update-quote/{quote-id}")
+    public ResponseEntity<String> updateQuote(@PathVariable("quote-id") Integer quoteId, @RequestBody @Valid QuoteRequest request){
+        if (quoteId == null){
+            throw new NullValueException("Quote ID is invalid!");
+        }
+        return new ResponseEntity<>(homePageService.updateQuote(quoteId, request), HttpStatus.CREATED);
     }
 
 }

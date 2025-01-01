@@ -3,6 +3,8 @@ package com.uiss.home.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -20,4 +22,10 @@ public class Testimonials {
     private String imageUrl;
     private String position;
     private String fullname;
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void onCreate(){
+        this.createdAt = LocalDateTime.now().withNano(0);
+    }
 }
