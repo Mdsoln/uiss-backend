@@ -20,13 +20,11 @@ public class Home {
 
     @Column(name = "home_id", nullable = false, length = 9)
     private String homeId;// automatically generated for querying and easily CRUD operations
-    @Size(max = 160)
-    @Column(nullable = false, length = 160)
+    @Column(nullable = false)
     private String homeTitle;
     @Column(nullable = false)
     private String homeDescription;
-    @Size(max = 500)
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false)
     private String backgroundImageUrl;
 
 }
