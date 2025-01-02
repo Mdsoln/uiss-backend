@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
-                        .requestMatchers("/api/v1/**")
+                        .requestMatchers("/api/v1/admin/**")
                         .permitAll()
                 ).sessionManagement(
                         session -> session
