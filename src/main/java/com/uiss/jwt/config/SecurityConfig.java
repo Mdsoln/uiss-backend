@@ -36,6 +36,8 @@ public class SecurityConfig {
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .requestMatchers("/api/v1/admin/**")
                         .permitAll()
+                        .requestMatchers("/api/v1/home-page/**")
+                        .permitAll()
                 ).sessionManagement(
                         session -> session
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
